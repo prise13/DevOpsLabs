@@ -1,0 +1,35 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby 	:
+
+ENV["VAGRANT_EXPERIMENTAL"] = "disks"
+ 
+ Vagrant.configure("2") do |config|
+
+  config.vm.define "ubuntu" do |ubuntu|
+  ubuntu.vm.box = "ubuntu/focal64" 
+
+  ubuntu.vm.disk :disk, size: "300MB", name: "extra_storage1"
+  ubuntu.vm.disk :disk, size: "300MB", name: "extra_storage2"
+  ubuntu.vm.disk :disk, size: "300MB", name: "extra_storage3"
+  ubuntu.vm.disk :disk, size: "300MB", name: "extra_storage4"
+
+  ubuntu.vm.network "forwarded_port", guest: 80, host: 8080
+end
+
+   config.vm.provision "shell", inline: <<-SHELL
+	
+	pvcreate /dev/sdc /dev/sdd /dev/sde /dev/sdf
+	vgcreate vg1 /dev/sdc /dev/sdd /dev/sde /dev/sdf
+	lvcreate -l 100%FREE vg1 /dev/sdc /dev/sdd -n lv1
+	lvcreate -l 100%FREE vg1 /dev/sde /dev/sdf -n lv2
+
+	mkfs.ext4 /dev/vg1/lv1
+	mkfs.ext4 /dev/vg1/lv2
+
+	mkdir -p /mnt/vol0 /mnt/vol1
+        echo '/dev/vg1/lv1 /mnt/vol0 ext4 defaults 0 0' >>/etc/fstab
+        echo '/dev/vg1/lv2 /mnt/vol1 ext4 defaults 0 0' >>/etc/fstab	
+	mount -a	
+	 
+   SHELL
+end
