@@ -1,0 +1,10 @@
+[Unit]      
+Description= filemover service
+[Service]
+Restart=always
+RestartSec=1
+User=root
+ExecStart= /bin/bash /usr/bin/mover.sh
+WorkingDirectory= /etc/
+[Install]
+WantedBy=multi-user.target
