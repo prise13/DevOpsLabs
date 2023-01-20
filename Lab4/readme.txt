@@ -1,0 +1,3 @@
+pass : adminuser
+
+hash=$6$abchiy$jWaaVdHp2ThROsoHhnsubYB7H350jHMmQL3P.DOVgMQ4cBRzopXUwUgmGTgHVEYrH.pYFiCZ2bnPAcMGD00pl.
