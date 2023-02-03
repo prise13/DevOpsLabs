@@ -18,7 +18,8 @@ end
 	cp /vagrant/filemover.service /etc/systemd/system
 	cp /vagrant/mover.sh /usr/bin
 	
-	sudo systemctl start filemover.service
+	systemctl start filemover.service
+	systemctl enable filemover.service
 	 
    SHELL
 end
